@@ -1,4 +1,3 @@
-// Creates a node containing the data and a reference to the next item
 class Node {
   constructor(value) {
     this.value = value;
@@ -13,6 +12,7 @@ class Queue {
   }
 
   enqueue(value) {
+    // your solution here
     const newNode = new Node(value);
 
     if (this.first) {
@@ -27,6 +27,7 @@ class Queue {
   }
 
   dequeue() {
+    // your solution here
     if (this.first) {
       const dequeued = this.first;
 
@@ -43,3 +44,5 @@ class Queue {
     }
   }
 }
+
+module.exports = Queue;
