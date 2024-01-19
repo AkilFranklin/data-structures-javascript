@@ -153,3 +153,60 @@ class LinkedList {
 }
 
 module.exports = LinkedList;
+
+
+
+
+
+
+
+
+function levenshteinDistance(str1, str2) {
+  const len1 = str1.length;
+  const len2 = str2.length;
+
+  const matrix = Array.from({ length: len1 + 1 }, () => Array(len2 + 1).fill(0));
+
+  for (let i = 0; i <= len1; i++) {
+    for (let j = 0; j <= len2; j++) {
+      if (i === 0) {
+        matrix[i][j] = j;
+      } else if (j === 0) {
+        matrix[i][j] = i;
+      } else {
+        const cost = str1[i - 1] !== str2[j - 1] ? 1 : 0;
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j] + 1, // Deletion
+          matrix[i][j - 1] + 1, // Insertion
+          matrix[i - 1][j - 1] + cost // Substitution
+        );
+      }
+    }
+  }
+
+  return matrix[len1][len2];
+}
+
+function fuzzySearch(query, list, threshold = 3) {
+  const results = [];
+
+  for (const item of list) {
+    const distance = levenshteinDistance(query, item);
+
+    if (distance <= threshold) {
+      results.push({ item, distance });
+    }
+  }
+
+  // Sort results by distance (optional)
+  results.sort((a, b) => a.distance - b.distance);
+
+  return results.map(result => result.item);
+}
+
+// Example usage:
+const searchQuery = 'apple';
+const wordList = ['apples', 'banana', 'orange', 'apricot', 'grape'];
+
+const matches = fuzzySearch(searchQuery, wordList);
+console.log(matches);
