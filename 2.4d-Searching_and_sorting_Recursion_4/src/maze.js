@@ -1,93 +1,50 @@
-/**
- * Return a string representing the path through the maze.
- * @param {array} maze
- * @param {array} index The starting point
- */
-function mazeSolver(maze, index = [0, 0]) {
-    let path = [index];
-// 	let visitedSet = new Set();
-	dfs(maze, index);
-	return path;
-	
-    function dfs(maze, index) {
-        if (isEndOfMaze(index)) {
-            return;
-        }
-		
-		console.log(path);
-
-		
-		if (path.length === 0) { return; }
-		
-        if (isValidMove(index[0] - 1, index[1])) { // Up
-			console.log('up', path);
-			path.push(index);
-			maze[index] = 'v'
-// 			visited.add(index);
-            dfs(maze, [index[0], index[1] + 1]);
-        }
-        if (isValidMove(index[0] + 1, index[1])) { // Down
-			console.log('down', path);
-			path.push(index);
-			maze[index] = 'v'
-// 			visited.add(index);			
-            dfs(maze, [index[0] + 1, index[1]]);
-        }
-        if (isValidMove(index[0], index[1] - 1)) { // Left
-			console.log('left', path);
-			path.push(index);
-			maze[index] = 'v'	
-// 			visited.add(index);			
-            dfs(maze, [index[0], index[1] - 1]);
-        }
-        if (isValidMove(index[0], index[1] + 1)) { // Right
-			console.log('right', path);
-			path.push(index);
-			maze[index] = 'v'	
-// 			visited.add(index);			
-            dfs(maze, [index[0], index[1] + 1]);
-        }
-        path.pop();
-// 		visited.delete(index);
+function mazeSolver(maze, currentPosition = [0, 0]) {
+    const [row, col] = currentPosition;
+  
+    // Check if the current position is outside the boundaries of the maze
+    if (row < 0 || col < 0 || row >= maze.length || col >= maze[0].length) {
+      return -1;
     }
-	
-// 	  let mySmallMaze = [
-//       ["v", "*", " "],
-//       ["v", " ", " "],
-//       [" ", "*", "e"],
-		  
-// path = [ [0,0]  ]
-
-// 	[2,0]
-
-
-
-    function isValidMove(row, column) {
-        if (0 <= row && row < maze.length &&
-			0 <= column && column < maze[0].length &&
-            !visited(row, column) &&
-            maze[row][column] !== '*'
-        ) {
-			console.log("true")
-            return true;
-        }
-			console.log("false")
-        return false;
+  
+    // Check if the current position is the exit
+    if (maze[row][col] === "e") {
+      return [];
     }
-    
-    function isEndOfMaze(row, column) {
-        if (path.slice(-1) === 'e') { 
-            return true;
-        }
-        return false;
+  
+    // Check if the current position is a blocked cell or already visited cell
+    if (maze[row][col] === "*" || maze[row][col] === "x") {
+      return -1;
     }
-
-    function visited(row, column) {
-        if (maze[row][column] === 'v') {
-            return true;
-        }
-        return false;
+  
+    // Mark the current cell as visited
+    maze[row][col] = "x";
+  
+    // Explore all possible directions: Right, Down, Left, Up
+      console.log(1);
+    const rightPath = mazeSolver(maze, [row, col + 1]);
+      console.log(2);
+    const downPath = mazeSolver(maze, [row + 1, col]);
+      console.log(3);	
+    const leftPath = mazeSolver(maze, [row, col - 1]);
+      console.log(4);	
+    const upPath = mazeSolver(maze, [row - 1, col]);
+      console.log(5);	
+  
+    // If any valid path is found, return the current position along with the path
+    if (rightPath !== -1) {
+      return "R" + rightPath;
+    } else if (downPath !== -1) {
+      return "D" + downPath;
+    } else if (leftPath !== -1) {
+      return "L" + leftPath;
+    } else if (upPath !== -1) {
+      return "U" + upPath;
+    } else {
+      // If no path is found, backtrack and mark the current cell as unvisited
+      maze[row][col] = " ";
+      return -1;
     }
-}
-
-module.exports = mazeSolver;
+  }
+  
+  module.exports = mazeSolver;
+  

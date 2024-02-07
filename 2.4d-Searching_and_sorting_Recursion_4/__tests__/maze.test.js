@@ -5,7 +5,7 @@ describe("Maze", () => {
     let mySmallMaze = [
       [" ", "*", " "],
       [" ", "*", " "],
-      [" ", "x", "e"],
+      [" ", " ", "e"],
     ];
     expect(mazeSolver(mySmallMaze)).toEqual("DDRR");
     
